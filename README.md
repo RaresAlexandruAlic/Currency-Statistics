@@ -1,4 +1,5 @@
-# ![](src/currencyStatistics/res/app_logo_small.png) Currency-Statistics
+# <img src="src/currencyStatistics/res/app_logo_small.png" width="50"> Currency-Statistics
+
 Simple Java app that allows the user to compare how a currency has developed throughout a year using another currency as base and **more**.
 The data is gathered using https://exchangeratesapi.io/.
 
