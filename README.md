@@ -3,6 +3,10 @@
 Simple Java app that allows the user to compare how a currency has developed throughout a year using another currency as base and **more**.
 The data is gathered using https://exchangeratesapi.io/.
 
+Try the app now:
+<a href="appJar/Currency%20Statistics.jar" target="_blank">Download</a>
+
+
 ## Version 1.0
 ### Current Features
 - Simple currency rates statistic for a year
