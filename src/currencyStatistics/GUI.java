@@ -3,7 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
 
 public class GUI extends JFrame implements ActionListener {
 
@@ -66,8 +65,10 @@ public class GUI extends JFrame implements ActionListener {
         outputPanelInit();
         buttonPanelInit();
 
+        //Get the image using classpath
+        //This way the resource will pe found by the .class item when the jar is executed
         ImageIcon image = new ImageIcon(GUI.class.getResource("res/app_logo.png"));
-        this.setIconImage(image.getImage());
+        this.setIconImage(image.getImage()); //Set the frame icon
 
 
         this.setVisible(true);
@@ -75,11 +76,12 @@ public class GUI extends JFrame implements ActionListener {
 
     private void comboBoxInit(JComboBox comboBox, String[] inputFields){
         for(String s : inputFields){
-            comboBox.addItem(s);
+            comboBox.addItem(s); //Populate combo box with options
         }
         comboBox.setFocusable(false);
     }
 
+    //Text fields don't need to be shown without requesting a comparation
     private void outputPanelInit(){
         increasesFied.setVisible(false);
         decreasesField.setVisible(false);
@@ -87,7 +89,7 @@ public class GUI extends JFrame implements ActionListener {
         lowestValueField.setVisible(false);
     }
 
-    private void inputPanelInit(){
+    private void inputPanelInit(){ //Set up the input comboboxes and the right side logo
 
         comboBoxInit(yearsComboBox, years);
         yearsComboBox.setSelectedIndex(years.length - 1);
@@ -108,13 +110,15 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     private void buttonPanelInit(){
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.TRAILING,10, 12));
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.TRAILING,10, 12)); //Layout for the buttons to appear from the  right side of the panel
         plotButton.addActionListener(this);
         runButton.addActionListener(this);
         exportButton.addActionListener(this);
     }
 
+    //Update each output field and label with its coresponding value
     private void updateOutput(String[] data, double[] comparedData){
+
         yearLabel.setText("Statistics of the year " + data[0]);
         increasesLabel.setText("Number of value increases of " + data[1] + " (" + currenciesName[currencyComboBox1.getSelectedIndex()] + ") compared to " + data[2] + " (" + currenciesName[currencyComboBox2.getSelectedIndex()] + ")"  );
         decreasesLabel.setText("Number of value decreases of " + data[1] + " (" + currenciesName[currencyComboBox1.getSelectedIndex()] + ") compared to " + data[2] + " (" + currenciesName[currencyComboBox2.getSelectedIndex()] + ")"  );
@@ -150,7 +154,7 @@ public class GUI extends JFrame implements ActionListener {
             plotButton.setEnabled(false);
         }
         else if(e.getSource() == runButton){
-            JsonParser parser = new JsonParser();
+            JsonParser parser = new JsonParser(); //New parser needed for the API request
             currencyComparatorComparatorResults = parser.parseData(selectedData[0],selectedData[1],selectedData[2]); //Start parsing the API response
 
             if(currencyComparatorComparatorResults.getStatus() != 0){ //Verify if the API has the requested combination of the currencies for the selected year
@@ -188,6 +192,7 @@ public class GUI extends JFrame implements ActionListener {
             }
         } else if(e.getSource() == plotButton){
 
+            //Prepare the data for plotting f(day) = value;
             double[] yData = currencyComparatorComparatorResults.getValues();
             double[] xData = new double[yData.length];
 
@@ -195,7 +200,7 @@ public class GUI extends JFrame implements ActionListener {
                 xData[i] = i+1;
             }
 
-            new Plotter("Days","Value", selectedData[1],xData,yData, selectedData);
+            new Plotter("Days","Value", selectedData[1],xData,yData, selectedData); //We get a new form with the plotted data
         }
     }
 }

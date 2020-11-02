@@ -35,22 +35,24 @@ public class JsonParser {
             int responseCode = connection.getResponseCode();
 
             if(responseCode > 299){
-                //failed response or wrong request URL - usually they have no data on
-                // one of the currencies for the requested year
+                //failed response or wrong request URL
+                //They have no data on one of the currencies for the requested year
                 //System.out.println(responseCode);
-                return new CurrencyComparator(); //return a null object with status = 0 == Error on request
+                return new CurrencyComparator(); //return a new object with status = 0 == Error on request
             }
             else{
+                //The API has the requested data for the selected combination
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line;
                 StringBuilder response = new StringBuilder();
 
+                //Start reading the response and append it to the string builder
                 while((line = in.readLine()) != null){
                     response.append(line);
                 }
                 in.close();
 
-                //get the object containing dates + values array without base, start_at and end_at
+                //Get the object containing dates + values array without base, start_at and end_at
                 JSONObject object =new JSONObject ((new JSONObject(response.toString())).getJSONObject("rates").toString());
                 //System.out.println(object.toString());
 
@@ -60,7 +62,7 @@ public class JsonParser {
                 while(keys.hasNext()){
                     //Iterate thought the array of the object and get the values of the key (date)
                     String key = keys.next();
-                    JSONObject aux = new JSONObject(object.getJSONObject(key).toString());
+                    JSONObject aux = new JSONObject(object.getJSONObject(key).toString()); //Obtain the value from i.e. {{"2018-10-20": 4.7893}, ....}
 
                     hashMap.put(key,aux.getDouble(currency1));
                     //System.out.println("Key: " + key +" Value:" + hashMap.get(key));
@@ -68,6 +70,7 @@ public class JsonParser {
 
                 //Order the hashMap by keys(Dates)
                 //The api provides the years' dates in a random order
+                //We need the dates to be ordered to get the correct number of increases and decreases of value
                 TreeMap<String, Double> sorted = new TreeMap<>(hashMap);
 
                 return new CurrencyComparator(sorted); //Return object with ordered dates + values
@@ -77,7 +80,7 @@ public class JsonParser {
             e.printStackTrace();
         }
 
-        return new CurrencyComparator(); //return a null object with status = 0 == Error on request
+        return new CurrencyComparator(); //return a new object with status = 0 == Error on request
     }
 
 

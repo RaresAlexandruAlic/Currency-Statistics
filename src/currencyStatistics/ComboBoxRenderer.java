@@ -11,7 +11,9 @@ public class ComboBoxRenderer extends DefaultListCellRenderer { //Rendering Clas
 
     public ComboBoxRenderer(String[] currenciesABV) {
         for (String s : currenciesABV) {
-            iconMap.put(s, new ImageIcon(ComboBoxRenderer.class.getResource("res/countryFlag/" + s + ".png"))); //Set every flag icon coresponding to the currency abreviation key
+            //Set every flag icon coresponding to the currency abreviation key
+            //Get image using class path
+            iconMap.put(s, new ImageIcon(ComboBoxRenderer.class.getResource("res/countryFlag/" + s + ".png")));
         }
     }
 
